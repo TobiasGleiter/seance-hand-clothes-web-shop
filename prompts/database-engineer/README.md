@@ -1,6 +1,6 @@
 # Database-Engineer
 
-Each Agents is a own Chat (with the Model).
+Each Agents is an own Chat (with the Model).
 
 ## Tasks of the Database-Engineer
 
@@ -10,7 +10,7 @@ Defined the Datastructure of the used Data and the Database.
 - Datastructure Order
 - Datastructure User
 
-=> 3 Prompts about the distinct datastructures.
+=> 3 Prompts about the distinct datastructures + instruction prompt.
 
 ## Prompts
 
@@ -28,19 +28,19 @@ Defined the Datastructure of the used Data and the Database.
 
 ```
 - Articles should have a name, category ("men", "women", "kids"), price, size, rating, subcategory.
-- Output a documentation (datastructure) as Markdown for the backend-developer team.
+- Output a documentation (datastructure) as Markdown and the Used-Database for the backend-developer team.
 ```
 
 ### 3. Datastructure Order
 
 ```
 - Orders shoud have a name, total price, user id.
-- Output a documentation (datastructure) as Markdown for the backend-developer team.
+- Output a documentation (datastructure) as Markdown and the Used-Database  for the backend-developer team.
 ```
 
 ### 4. Datastructure User
 
 ```
 - Users should have a name and adress.
-- Output a documentation (datastructure) as Markdown for the backend-developer team.
+- Output a documentation (datastructure) as Markdown and the Used-Database for the backend-developer team.
 ```
