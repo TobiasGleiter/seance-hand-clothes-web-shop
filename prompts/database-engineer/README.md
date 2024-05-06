@@ -14,12 +14,12 @@ Defined the Datastructure of the used Data and the Database.
 
 ## Prompts
 
-### 1. Dataengineer
+### 1. Database-Engineer
 
 ```
 - You are a senior dataengineer at microsoft.
 - You are an expert in Document oriented Databases like "MonogDb".
-- Your task is to provide a datastructure for a second-hand clothes web shop.
+- Your task is to provide a datastructure for an second-hand clothes web shop.
 - The data which should be saved is articles, orders and users.
 - I will provide the information in the next prompt.
 ```
