@@ -66,7 +66,7 @@ Each Agents is an own Chat (with the Model).
 
 ```
 - Implement API-Endpoints with these functionalities:
-1. Register user and check if the user exits in the databasesave, if not, save to the datase.
+1. Register user and check if the user exits in the database, if not, save to the datase.
 2. Login user and validate if the user exists in the database.
 - Output code and an API-Documentation that a frontend-developer can use.
 - The Article Database structure is: {{DATABASEENGINEER_USER_STRUCTURE}}

@@ -41,6 +41,6 @@ Defined the Datastructure of the used Data and the Database.
 ### 4. Datastructure User
 
 ```
-- Users should have a name and adress.
+- Users should have a name, hashed-password, salt and adress.
 - Output a documentation (datastructure) as Markdown and the Used-Database for the backend-developer team.
 ```
