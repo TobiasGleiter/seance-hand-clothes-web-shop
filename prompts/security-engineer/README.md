@@ -33,6 +33,7 @@ Only for the Register and Login pages.
 3. Enforce data validation on serverside
 4. Validate if password is hashed and salted before saved to database.
 - Output updated, secure code.
+- The code is: {{CODE}}
 ```
 
 ### 3. Secure Login Functionality
@@ -43,4 +44,5 @@ Only for the Register and Login pages.
 2. Enforce a character set (UTF-8)
 3. Enforce data validation on serverside
 - Output updated, secure code.
+- The code is: {{CODE}}
 ```
