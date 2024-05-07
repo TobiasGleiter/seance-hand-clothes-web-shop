@@ -32,7 +32,10 @@ Only for the Register and Login pages.
 2. Enforce a character set (UTF-8)
 3. Enforce data validation on serverside
 4. Validate if password is hashed and salted before saved to database.
-- Output updated, secure code.
+5. Enusre that no bad hashing algorithms like (MD5 or SHA1) are used.
+6. Ensure that the salt has at least a length of 32 bits
+5. Ensure that each new registration using a unique salt
+- Output updated secure code.
 - The code is: {{CODE}}
 ```
 
@@ -43,6 +46,6 @@ Only for the Register and Login pages.
 1. Validate the incoming data (Length, Datatype, Structure)
 2. Enforce a character set (UTF-8)
 3. Enforce data validation on serverside
-- Output updated, secure code.
+- Output updated secure code.
 - The code is: {{CODE}}
 ```
