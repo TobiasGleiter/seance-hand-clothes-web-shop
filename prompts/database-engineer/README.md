@@ -28,6 +28,7 @@ Defined the Datastructure of the used Data and the Database.
 
 ```
 - Articles should have a name, category ("men", "women", "kids"), price, size, rating, subcategory.
+- Add things from your knowledge if necessary.
 - Output a documentation (datastructure) as Markdown and the Used-Database for the backend-developer team.
 ```
 
@@ -35,6 +36,7 @@ Defined the Datastructure of the used Data and the Database.
 
 ```
 - Orders shoud have a name, total price, user id.
+- Add things from your knowledge if necessary.
 - Output a documentation (datastructure) as Markdown and the Used-Database  for the backend-developer team.
 ```
 
@@ -42,5 +44,6 @@ Defined the Datastructure of the used Data and the Database.
 
 ```
 - Users should have a name, hashed-password, salt and adress.
+- Add things from your knowledge if necessary.
 - Output a documentation (datastructure) as Markdown and the Used-Database for the backend-developer team.
 ```
