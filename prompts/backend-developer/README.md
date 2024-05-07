@@ -72,14 +72,38 @@ Each Agents is an own Chat (with the Model).
 - The Article Database structure is: {{DATABASEENGINEER_USER_STRUCTURE}}
 ```
 
-### 5. CRUD articles
+### 5. Seller Articles
 
 ```
-- Implement API-Endpoints with these functionalities:
+- Implement the API-Endpoint with this functionality:
 1. Read articles for a given user from the database
-2. Create an article for a given user and save to the database
-3. Delete an article for a given user from the database
-4. Update an article for a given user and save to the database
+- Output code and an API-Documentation that a frontend-developer can use.
+- The Article Database structure is: {{DATABASEENGINEER_USER_STRUCTURE}}
+```
+
+### 6. Create Seller Articles
+
+```
+- Implement the API-Endpoint with this functionality:
+1. Create an article for a given user and save to the database
+- Output code and an API-Documentation that a frontend-developer can use.
+- The Article Database structure is: {{DATABASEENGINEER_USER_STRUCTURE}}
+```
+
+### 7. Delete Seller Articles
+
+```
+- Implement the API-Endpoint with this functionality:
+1. Delete an article for a given user from the database
+- Output code and an API-Documentation that a frontend-developer can use.
+- The Article Database structure is: {{DATABASEENGINEER_USER_STRUCTURE}}
+```
+
+### 8. Update Seller Articles
+
+```
+- Implement the API-Endpoint with this functionality:
+1. Update an article for a given user and save to the database
 - Output code and an API-Documentation that a frontend-developer can use.
 - The Article Database structure is: {{DATABASEENGINEER_USER_STRUCTURE}}
 ```
