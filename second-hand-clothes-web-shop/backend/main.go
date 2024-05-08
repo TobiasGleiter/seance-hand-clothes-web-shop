@@ -223,6 +223,43 @@ func loginUser(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintf(w, "User logged in successfully")
 }
 
+// Function to read articles for a given user
+func getArticlesForUser(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+
+    // Assuming user ID is passed in the request body
+    var requestData struct {
+        UserID string `json:"userId"`
+    }
+    json.NewDecoder(r.Body).Decode(&requestData)
+
+    userID, err := primitive.ObjectIDFromHex(requestData.UserID)
+    if err != nil {
+        http.Error(w, "Invalid user ID", http.StatusBadRequest)
+        return
+    }
+
+    var articles []Article
+    collection := client.Database(dbName).Collection(collectionName)
+    cursor, err := collection.Find(context.Background(), bson.M{"sellerId": userID})
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer cursor.Close(context.Background())
+    for cursor.Next(context.Background()) {
+        var article Article
+        err := cursor.Decode(&article)
+        if err != nil {
+            log.Fatal(err)
+        }
+        articles = append(articles, article)
+    }
+    if err := cursor.Err(); err != nil {
+        log.Fatal(err)
+    }
+    json.NewEncoder(w).Encode(articles)
+}
+
 
 func main() {
     connectDB()
@@ -241,7 +278,9 @@ func main() {
 	// Define API endpoints
 	http.HandleFunc("/register", registerUser)
 	http.HandleFunc("/login", loginUser)
-	
+
+    // Define API endpoints
+    http.HandleFunc("/articlesForUser", getArticlesForUser)
 
     // Start the server
     fmt.Println("Server is running on port 8080")
