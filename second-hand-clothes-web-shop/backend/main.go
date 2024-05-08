@@ -320,6 +320,42 @@ func deleteArticleForUser(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintf(w, "Article deleted successfully")
 }
 
+// Function to update an article for a given user and save it to the database
+func updateArticleForUser(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+
+    // Assuming article details and user ID are passed in the request body
+    var requestData struct {
+        UserID string `json:"userId"`
+        Article Article `json:"article"`
+    }
+    json.NewDecoder(r.Body).Decode(&requestData)
+
+    // Convert user ID to ObjectID
+    userID, err := primitive.ObjectIDFromHex(requestData.UserID)
+    if err != nil {
+        http.Error(w, "Invalid user ID", http.StatusBadRequest)
+        return
+    }
+
+    // Update the article in the database
+    collection := client.Database(dbName).Collection(collectionName)
+    filter := bson.M{"_id": requestData.Article.ID, "sellerId": userID}
+    update := bson.M{"$set": bson.M{
+        "name": requestData.Article.Name,
+        "category": requestData.Article.Category,
+        "price": requestData.Article.Price,
+        "size": requestData.Article.Size,
+        "rating": requestData.Article.Rating,
+        "subcategory": requestData.Article.Subcategory,
+    }}
+    _, err = collection.UpdateOne(context.Background(), filter, update)
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Fprintf(w, "Article updated successfully")
+}
+
 func main() {
     connectDB()
     defer client.Disconnect(context.Background())
@@ -339,6 +375,7 @@ func main() {
     http.HandleFunc("/articlesForUser", getArticlesForUser)
 	http.HandleFunc("/createArticleForUser", createArticleForUser)
 	http.HandleFunc("/deleteArticleForUser", deleteArticleForUser)
+	http.HandleFunc("/updateArticleForUser", updateArticleForUser)
 
     // Start the server
     fmt.Println("Server is running on port 8080")
