@@ -6,9 +6,12 @@ import (
     "fmt"
     "log"
     "net/http"
+	"time"
 
     "go.mongodb.org/mongo-driver/mongo"
     "go.mongodb.org/mongo-driver/mongo/options"
+    "go.mongodb.org/mongo-driver/bson/primitive"
+    "go.mongodb.org/mongo-driver/bson"
 )
 
 // Article structure
@@ -20,6 +23,21 @@ type Article struct {
     Size       string             `json:"size,omitempty" bson:"size,omitempty"`
     Rating     float64            `json:"rating,omitempty" bson:"rating,omitempty"`
     Subcategory string            `json:"subcategory,omitempty" bson:"subcategory,omitempty"`
+}
+
+type Order struct {
+    ID         primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+    Name       string             `json:"name,omitempty" bson:"name,omitempty"`
+    TotalPrice float64            `json:"totalPrice,omitempty" bson:"totalPrice,omitempty"`
+    UserID     primitive.ObjectID `json:"userId,omitempty" bson:"userId,omitempty"`
+    OrderDate  time.Time          `json:"orderDate,omitempty" bson:"orderDate,omitempty"`
+    Articles   []OrderItem        `json:"articles,omitempty" bson:"articles,omitempty"`
+}
+
+// OrderItem structure
+type OrderItem struct {
+    ArticleID primitive.ObjectID `json:"articleId,omitempty" bson:"articleId,omitempty"`
+    Quantity  int                `json:"quantity,omitempty" bson:"quantity,omitempty"`
 }
 
 // MongoDB connection information
@@ -34,7 +52,8 @@ var client *mongo.Client
 // Connect to MongoDB
 func connectDB() {
     clientOptions := options.Client().ApplyURI(connectionString)
-    client, err := mongo.Connect(context.Background(), clientOptions)
+    var err error
+    client, err = mongo.Connect(context.Background(), clientOptions)
     if err != nil {
         log.Fatal(err)
     }
@@ -96,6 +115,24 @@ func getArticlesByCategory(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(articles)
 }
 
+func saveOrder(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+    var order Order
+    json.NewDecoder(r.Body).Decode(&order)
+
+    // Set order date
+    order.OrderDate = time.Now()
+
+    // Insert order into database
+    collection := client.Database(dbName).Collection(collectionName)
+    result, err := collection.InsertOne(context.Background(), order)
+    if err != nil {
+        log.Fatal(err)
+    }
+    json.NewEncoder(w).Encode(result.InsertedID)
+}
+
+
 func main() {
     connectDB()
     defer client.Disconnect(context.Background())
@@ -105,6 +142,9 @@ func main() {
     http.HandleFunc("/articles/women", getArticlesByCategory)
     http.HandleFunc("/articles/men", getArticlesByCategory)
     http.HandleFunc("/articles/kids", getArticlesByCategory)
+
+	// Define API endpoints
+	http.HandleFunc("/orders", saveOrder)
 
     // Start the server
     fmt.Println("Server is running on port 8080")
