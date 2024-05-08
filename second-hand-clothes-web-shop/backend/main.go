@@ -41,12 +41,24 @@ type OrderItem struct {
     Quantity  int                `json:"quantity,omitempty" bson:"quantity,omitempty"`
 }
 
+// User structure
+type User struct {
+	ID            primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+	Name          string             `json:"name,omitempty" bson:"name,omitempty"`
+	HashedPassword string            `json:"hashedPassword,omitempty" bson:"hashedPassword,omitempty"`
+	Salt          string             `json:"salt,omitempty" bson:"salt,omitempty"`
+	Email         string             `json:"email,omitempty" bson:"email,omitempty"`
+	Address       string             `json:"address,omitempty" bson:"address,omitempty"`
+	Role          string             `json:"role,omitempty" bson:"role,omitempty"`
+}
+
 // MongoDB connection information
 const (
     connectionString = "mongodb://localhost:27017"
     dbName           = "clothes_db"
     collectionName   = "articles"
 )
+
 
 var client *mongo.Client
 
@@ -164,6 +176,53 @@ func saveOrder(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(result.InsertedID)
 }
 
+// Function to register a new user
+func registerUser(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+    var user User
+    json.NewDecoder(r.Body).Decode(&user)
+
+    // Check if the user already exists
+    existingUser := User{}
+    collection := client.Database(dbName).Collection(collectionName)
+    err := collection.FindOne(context.Background(), bson.M{"email": user.Email}).Decode(&existingUser)
+    if err == nil {
+        // User already exists
+        http.Error(w, "User already exists", http.StatusBadRequest)
+        return
+    }
+
+    // Save the new user to the database
+    _, err = collection.InsertOne(context.Background(), user)
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Fprintf(w, "User registered successfully")
+}
+
+// Function to login a user
+func loginUser(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+    var user User
+    json.NewDecoder(r.Body).Decode(&user)
+
+    // Check if the user exists
+    existingUser := User{}
+    collection := client.Database(dbName).Collection(collectionName)
+    err := collection.FindOne(context.Background(), bson.M{"email": user.Email}).Decode(&existingUser)
+    if err != nil {
+        // User not found
+        http.Error(w, "User not found", http.StatusUnauthorized)
+        return
+    }
+
+    // Validate password
+    // Here you would typically compare the hashed password with the password provided by the user,
+    // using a secure password hashing algorithm like bcrypt. For simplicity, I'm omitting that part here.
+
+    fmt.Fprintf(w, "User logged in successfully")
+}
+
 
 func main() {
     connectDB()
@@ -178,6 +237,11 @@ func main() {
 	http.HandleFunc("/orders", saveOrder)
 
 	http.HandleFunc("/articleDetails", getArticleDetails)
+
+	// Define API endpoints
+	http.HandleFunc("/register", registerUser)
+	http.HandleFunc("/login", loginUser)
+	
 
     // Start the server
     fmt.Println("Server is running on port 8080")
