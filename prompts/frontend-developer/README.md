@@ -212,26 +212,26 @@ Each Agent is an own Chat (with the Model).
 
 ```
 - Implement the Seller Article Details page with the following functionalities:
+1. Implement the read one article details for a given user functionality (API-Docs)
+- Output code.
+- The API-Documentation is: {{API_DOCUMENATION}}
+```
+
+## 14. Delete Seller Article
+
+```
+- Implement the Seller Article Details page with the following functionalities:
 1. Navigation to seller article details page
 2. Implement the delete article functionality (API-Docs)
 - Output code.
 - The API-Documentation is: {{API_DOCUMENATION}}
 ```
 
-## 14. Seller Article Details pages
+## 15. Update Seller Article
 
 ```
 - Implement the Seller Article Details page with the following functionalities:
-3. Implement the read article details for a given user functionality (API-Docs)
-- Output code.
-- The API-Documentation is: {{API_DOCUMENATION}}
-```
-
-## 15. Seller Article Details pages
-
-```
-- Implement the Seller Article Details page with the following functionalities:
-4. Implement the save article functionality (API-Docs)
+1. Implement the save article functionality (API-Docs)
 - Output code.
 - The API-Documentation is: {{API_DOCUMENATION}}
 ```
