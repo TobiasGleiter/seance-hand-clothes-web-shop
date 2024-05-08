@@ -107,3 +107,12 @@ Each Agents is an own Chat (with the Model).
 - Output code and an API-Documentation that a frontend-developer can use.
 - The Article Database structure is: {{DATABASEENGINEER_USER_STRUCTURE}}
 ```
+
+### 10. Article Details (forgot it in the first round)
+
+```
+- Implement an API-Endpoint with this functionality:
+1. Read article details from the "MonogDB" database.
+- Output code and an API-Documentation that a frontend-developer can use.
+- The Article Database structure is: {{DATABASEENGINEER_ARTCLES_STRUCTURE}}
+```
