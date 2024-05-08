@@ -10,9 +10,9 @@
   "price": "Number",
   "size": "String",
   "rating": "Number",
-  "subcategory": "String"
+  "subcategory": "String",
+  "sellerId": ObjectId, // "new, forgot this in the prompt
 }
-
 ```
 
 ## Order:
