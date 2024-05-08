@@ -288,7 +288,37 @@ func createArticleForUser(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintf(w, "Article created successfully")
 }
 
+// Function to delete an article for a given user from the database
+func deleteArticleForUser(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
 
+    // Assuming article ID and user ID are passed in the request body
+    var requestData struct {
+        UserID   string `json:"userId"`
+        ArticleID string `json:"articleId"`
+    }
+    json.NewDecoder(r.Body).Decode(&requestData)
+
+    // Convert user ID and article ID to ObjectIDs
+    userID, err := primitive.ObjectIDFromHex(requestData.UserID)
+    if err != nil {
+        http.Error(w, "Invalid user ID", http.StatusBadRequest)
+        return
+    }
+    articleID, err := primitive.ObjectIDFromHex(requestData.ArticleID)
+    if err != nil {
+        http.Error(w, "Invalid article ID", http.StatusBadRequest)
+        return
+    }
+
+    // Delete the article from the database
+    collection := client.Database(dbName).Collection(collectionName)
+    _, err = collection.DeleteOne(context.Background(), bson.M{"_id": articleID, "sellerId": userID})
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Fprintf(w, "Article deleted successfully")
+}
 
 func main() {
     connectDB()
@@ -299,17 +329,16 @@ func main() {
     http.HandleFunc("/articles/women", getArticlesByCategory)
     http.HandleFunc("/articles/men", getArticlesByCategory)
     http.HandleFunc("/articles/kids", getArticlesByCategory)
+	http.HandleFunc("/articleDetails", getArticleDetails)
 
 	http.HandleFunc("/orders", saveOrder)
-
-	http.HandleFunc("/articleDetails", getArticleDetails)
 
 	http.HandleFunc("/register", registerUser)
 	http.HandleFunc("/login", loginUser)
 
     http.HandleFunc("/articlesForUser", getArticlesForUser)
-
 	http.HandleFunc("/createArticleForUser", createArticleForUser)
+	http.HandleFunc("/deleteArticleForUser", deleteArticleForUser)
 
     // Start the server
     fmt.Println("Server is running on port 8080")
