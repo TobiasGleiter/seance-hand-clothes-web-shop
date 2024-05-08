@@ -6,17 +6,17 @@ const Navigation = () => {
       <ul>
         <li>
           <Link href="/women">
-            <a>Women</a>
+            Women
           </Link>
         </li>
         <li>
           <Link href="/men">
-            <a>Men</a>
+            Men
           </Link>
         </li>
         <li>
           <Link href="/kids">
-            <a>Kids</a>
+            Kids
           </Link>
         </li>
       </ul>
