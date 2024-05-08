@@ -23,6 +23,7 @@ type Article struct {
     Size       string             `json:"size,omitempty" bson:"size,omitempty"`
     Rating     float64            `json:"rating,omitempty" bson:"rating,omitempty"`
     Subcategory string            `json:"subcategory,omitempty" bson:"subcategory,omitempty"`
+	SellerID   primitive.ObjectID `json:"sellerId,omitempty" bson:"sellerId,omitempty"`
 }
 
 type Order struct {
@@ -115,6 +116,37 @@ func getArticlesByCategory(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(articles)
 }
 
+// Function to read article details from the database
+func getArticleDetails(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+
+    // Assuming article ID is passed in the request URL query parameters
+    articleID := r.URL.Query().Get("articleId")
+    if articleID == "" {
+        http.Error(w, "Missing article ID", http.StatusBadRequest)
+        return
+    }
+
+    // Convert article ID to ObjectID
+    objID, err := primitive.ObjectIDFromHex(articleID)
+    if err != nil {
+        http.Error(w, "Invalid article ID", http.StatusBadRequest)
+        return
+    }
+
+    // Find the article in the database
+    var article Article
+    collection := client.Database(dbName).Collection(collectionName)
+    err = collection.FindOne(context.Background(), bson.M{"_id": objID}).Decode(&article)
+    if err != nil {
+        http.Error(w, "Article not found", http.StatusNotFound)
+        return
+    }
+
+    // Encode the article details and send as response
+    json.NewEncoder(w).Encode(article)
+}
+
 func saveOrder(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
     var order Order
@@ -143,8 +175,9 @@ func main() {
     http.HandleFunc("/articles/men", getArticlesByCategory)
     http.HandleFunc("/articles/kids", getArticlesByCategory)
 
-	// Define API endpoints
 	http.HandleFunc("/orders", saveOrder)
+
+	http.HandleFunc("/articleDetails", getArticleDetails)
 
     // Start the server
     fmt.Println("Server is running on port 8080")
