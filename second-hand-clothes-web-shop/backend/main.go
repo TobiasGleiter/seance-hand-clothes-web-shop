@@ -260,6 +260,35 @@ func getArticlesForUser(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(articles)
 }
 
+// Function to create an article for a given user and save it to the database
+func createArticleForUser(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+
+    // Assuming article details and user ID are passed in the request body
+    var requestData struct {
+        UserID string `json:"userId"`
+        Article Article `json:"article"`
+    }
+    json.NewDecoder(r.Body).Decode(&requestData)
+
+    // Set the seller ID for the article
+    sellerID, err := primitive.ObjectIDFromHex(requestData.UserID)
+    if err != nil {
+        http.Error(w, "Invalid user ID", http.StatusBadRequest)
+        return
+    }
+    requestData.Article.SellerID = sellerID
+
+    // Save the article to the database
+    collection := client.Database(dbName).Collection(collectionName)
+    _, err = collection.InsertOne(context.Background(), requestData.Article)
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Fprintf(w, "Article created successfully")
+}
+
+
 
 func main() {
     connectDB()
@@ -275,12 +304,12 @@ func main() {
 
 	http.HandleFunc("/articleDetails", getArticleDetails)
 
-	// Define API endpoints
 	http.HandleFunc("/register", registerUser)
 	http.HandleFunc("/login", loginUser)
 
-    // Define API endpoints
     http.HandleFunc("/articlesForUser", getArticlesForUser)
+
+	http.HandleFunc("/createArticleForUser", createArticleForUser)
 
     // Start the server
     fmt.Println("Server is running on port 8080")
