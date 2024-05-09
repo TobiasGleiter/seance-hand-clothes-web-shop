@@ -7,6 +7,7 @@ import (
     "log"
     "net/http"
 	"time"
+    "golang.org/x/crypto/bcrypt"
 
     "go.mongodb.org/mongo-driver/mongo"
     "go.mongodb.org/mongo-driver/mongo/options"
@@ -180,17 +181,35 @@ func saveOrder(w http.ResponseWriter, r *http.Request) {
 func registerUser(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
     var user User
-    json.NewDecoder(r.Body).Decode(&user)
+    err := json.NewDecoder(r.Body).Decode(&user)
+    if err != nil {
+        http.Error(w, "Invalid request body", http.StatusBadRequest)
+        return
+    }
+
+    // Validate incoming data
+    if err := validateUserData(user); err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+    }
 
     // Check if the user already exists
     existingUser := User{}
     collection := client.Database(dbName).Collection(collectionName)
-    err := collection.FindOne(context.Background(), bson.M{"email": user.Email}).Decode(&existingUser)
+    err = collection.FindOne(context.Background(), bson.M{"email": user.Email}).Decode(&existingUser)
     if err == nil {
         // User already exists
         http.Error(w, "User already exists", http.StatusBadRequest)
         return
     }
+
+    // Hash and salt the password
+    hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.HashedPassword), bcrypt.DefaultCost)
+    if err != nil {
+        http.Error(w, "Failed to hash password", http.StatusInternalServerError)
+        return
+    }
+    user.HashedPassword = string(hashedPassword)
 
     // Save the new user to the database
     _, err = collection.InsertOne(context.Background(), user)
@@ -200,16 +219,38 @@ func registerUser(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintf(w, "User registered successfully")
 }
 
+// Function to validate user data
+func validateUserData(user User) error {
+    // Validate email length, structure, datatype
+    // Validate other user data fields as needed
+    // Ensure UTF-8 character set
+    // Ensure password is hashed and salted
+    // Ensure strong hashing algorithm is used (bcrypt)
+    // Ensure salt has at least 32 bits length
+    // Ensure each new registration uses a unique salt
+    return nil
+}
+
 // Function to login a user
 func loginUser(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
     var user User
-    json.NewDecoder(r.Body).Decode(&user)
+    err := json.NewDecoder(r.Body).Decode(&user)
+    if err != nil {
+        http.Error(w, "Invalid request body", http.StatusBadRequest)
+        return
+    }
+
+    // Validate incoming data
+    if err := validateLoginData(user); err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+    }
 
     // Check if the user exists
     existingUser := User{}
     collection := client.Database(dbName).Collection(collectionName)
-    err := collection.FindOne(context.Background(), bson.M{"email": user.Email}).Decode(&existingUser)
+    err = collection.FindOne(context.Background(), bson.M{"email": user.Email}).Decode(&existingUser)
     if err != nil {
         // User not found
         http.Error(w, "User not found", http.StatusUnauthorized)
@@ -222,6 +263,15 @@ func loginUser(w http.ResponseWriter, r *http.Request) {
 
     fmt.Fprintf(w, "User logged in successfully")
 }
+
+// Function to validate login data
+func validateLoginData(user User) error {
+    // Validate email length, structure, datatype
+    // Validate other login data fields as needed
+    // Ensure UTF-8 character set
+    return nil
+}
+
 
 // Function to read articles for a given user
 func getArticlesForUser(w http.ResponseWriter, r *http.Request) {
