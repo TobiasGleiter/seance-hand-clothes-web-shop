@@ -12,7 +12,7 @@ const MenPage = () => {
 
   const fetchMenArticles = async () => {
     try {
-      const response = await axios.get("/articles/men");
+      const response = await axios.get("http://localhost:8080/articles/men"); //?category=men
       setMenArticles(response.data);
       setFilteredArticles(response.data);
     } catch (error) {
@@ -31,6 +31,7 @@ const MenPage = () => {
       setFilteredArticles(filtered);
     }
   };
+
 
   return (
     <div>

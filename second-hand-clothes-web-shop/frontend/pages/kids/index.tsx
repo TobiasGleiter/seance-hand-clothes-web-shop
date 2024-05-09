@@ -12,7 +12,7 @@ const KidsPage = () => {
 
   const fetchKidsArticles = async () => {
     try {
-      const response = await axios.get("/articles/kids");
+      const response = await axios.get("http://localhost:8080/articles/kids"); //?category=kids
       setKidsArticles(response.data);
       setFilteredArticles(response.data);
     } catch (error) {

@@ -12,7 +12,7 @@ const WomenPage = () => {
 
   const fetchWomenArticles = async () => {
     try {
-      const response = await axios.get("/articles/women");
+      const response = await axios.get("http://localhost:8080/articles/women"); //?category=women
       setWomenArticles(response.data);
       setFilteredArticles(response.data);
     } catch (error) {

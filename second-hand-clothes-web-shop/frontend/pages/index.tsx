@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Navigation from "../components/Navigation";
+import Link from "next/link";
 
 const LandingPage = () => {
   const [articles, setArticles] = useState([]);
@@ -62,12 +63,12 @@ const LandingPage = () => {
       </select>
       <div>
         {filteredArticles.map((article) => (
-          <div key={article.id}>
+          <Link href={`/articles/${article._id}`} key={article._id}>
             <h2>{article.name}</h2>
             <p>Size: {article.size}</p>
             <p>Category: {article.category}</p>
             <p>Price: {article.price}</p>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

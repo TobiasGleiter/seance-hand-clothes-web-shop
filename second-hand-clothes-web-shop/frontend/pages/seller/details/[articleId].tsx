@@ -21,7 +21,7 @@ const SellerArticleDetailsPage = ({ userId, articleId }) => {
   const fetchArticleDetails = async () => {
     try {
       const response = await axios.get(
-        `/articleDetails?articleId=${articleId}`,
+        `http://localhost:8080/articleDetails?articleId=${articleId}`,
       );
       setArticleDetails(response.data);
     } catch (error) {

@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useRouter } from "next/router";
 
-const ArticleDetailsPage = ({ articleId }) => {
+const ArticleDetailsPage = () => {
+  const router = useRouter();
+  const { articleId } = router.query;
+  
   const [articleDetails, setArticleDetails] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [addToCartSuccess, setAddToCartSuccess] = useState(false);
@@ -13,7 +17,7 @@ const ArticleDetailsPage = ({ articleId }) => {
   const fetchArticleDetails = async () => {
     try {
       const response = await axios.get(
-        `/articleDetails?articleId=${articleId}`,
+        `http://localhost:8080/articleDetails?articleId=${articleId}`,
       );
       setArticleDetails(response.data);
     } catch (error) {
