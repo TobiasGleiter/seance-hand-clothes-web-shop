@@ -63,12 +63,12 @@ const LandingPage = () => {
       </select>
       <div>
         {filteredArticles.map((article) => (
-          <Link href={`/articles/${article._id}`} key={article._id}>
+          <div key={article.id}>
             <h2>{article.name}</h2>
             <p>Size: {article.size}</p>
             <p>Category: {article.category}</p>
             <p>Price: {article.price}</p>
-          </Link>
+          </div>
         ))}
       </div>
     </div>
