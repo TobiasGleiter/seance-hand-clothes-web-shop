@@ -46,9 +46,14 @@ const LandingPage = () => {
   };
 
   return (
-    <div>
+    <div className="landing-page">
+    <header className="header">
       <h1>Second-Hand Clothes Web Shop</h1>
-      <Navigation />
+      <nav>
+        {/* Navigation items */}
+      </nav>
+    </header>
+    <div className="search-bar">
       <input
         type="text"
         placeholder="Search by article name"
@@ -61,17 +66,18 @@ const LandingPage = () => {
         <option value="M">Medium</option>
         <option value="L">Large</option>
       </select>
-      <div>
-        {filteredArticles.map((article) => (
-          <div key={article.id}>
-            <h2>{article.name}</h2>
-            <p>Size: {article.size}</p>
-            <p>Category: {article.category}</p>
-            <p>Price: {article.price}</p>
-          </div>
-        ))}
-      </div>
     </div>
+    <div className="article-grid">
+      {filteredArticles.map((article) => (
+        <div key={article.id} className="article-card">
+          <h2>{article.name}</h2>
+          <p>Size: {article.size}</p>
+          <p>Category: {article.category}</p>
+          <p>Price: {article.price}</p>
+        </div>
+      ))}
+    </div>
+  </div>
   );
 };
 
