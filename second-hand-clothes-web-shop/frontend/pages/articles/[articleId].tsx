@@ -2,10 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 
-const ArticleDetailsPage = () => {
-  const router = useRouter();
-  const { articleId } = router.query;
-  
+const ArticleDetailsPage = ({ articleId }) => {
   const [articleDetails, setArticleDetails] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [addToCartSuccess, setAddToCartSuccess] = useState(false);
