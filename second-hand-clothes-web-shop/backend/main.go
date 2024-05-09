@@ -80,9 +80,16 @@ func connectDB() {
     fmt.Println("Connected to MongoDB!")
 }
 
+// Manually because of cors issues!
+func enableCors(w *http.ResponseWriter) {
+    (*w).Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+}
+
 // Endpoint to get all articles
 func getAllArticles(w http.ResponseWriter, r *http.Request) {
+    enableCors(&w)
     w.Header().Set("Content-Type", "application/json")
+
     var articles []Article
     collection := client.Database(dbName).Collection(collectionName)
     cursor, err := collection.Find(context.Background(), bson.M{})
@@ -106,6 +113,7 @@ func getAllArticles(w http.ResponseWriter, r *http.Request) {
 
 // Endpoint to get articles by category
 func getArticlesByCategory(w http.ResponseWriter, r *http.Request) {
+    enableCors(&w)
     w.Header().Set("Content-Type", "application/json")
     category := r.URL.Query().Get("category")
     var articles []Article
@@ -131,6 +139,7 @@ func getArticlesByCategory(w http.ResponseWriter, r *http.Request) {
 
 // Function to read article details from the database
 func getArticleDetails(w http.ResponseWriter, r *http.Request) {
+    enableCors(&w)
     w.Header().Set("Content-Type", "application/json")
 
     // Assuming article ID is passed in the request URL query parameters
@@ -179,6 +188,7 @@ func saveOrder(w http.ResponseWriter, r *http.Request) {
 
 // Function to register a new user
 func registerUser(w http.ResponseWriter, r *http.Request) {
+    enableCors(&w)
     w.Header().Set("Content-Type", "application/json")
     var user User
     err := json.NewDecoder(r.Body).Decode(&user)
@@ -233,6 +243,7 @@ func validateUserData(user User) error {
 
 // Function to login a user
 func loginUser(w http.ResponseWriter, r *http.Request) {
+    enableCors(&w)
     w.Header().Set("Content-Type", "application/json")
     var user User
     err := json.NewDecoder(r.Body).Decode(&user)
@@ -275,6 +286,7 @@ func validateLoginData(user User) error {
 
 // Function to read articles for a given user
 func getArticlesForUser(w http.ResponseWriter, r *http.Request) {
+    enableCors(&w)
     w.Header().Set("Content-Type", "application/json")
 
     // Assuming user ID is passed in the request body
@@ -312,6 +324,7 @@ func getArticlesForUser(w http.ResponseWriter, r *http.Request) {
 
 // Function to create an article for a given user and save it to the database
 func createArticleForUser(w http.ResponseWriter, r *http.Request) {
+    enableCors(&w)
     w.Header().Set("Content-Type", "application/json")
 
     // Assuming article details and user ID are passed in the request body
@@ -340,6 +353,7 @@ func createArticleForUser(w http.ResponseWriter, r *http.Request) {
 
 // Function to delete an article for a given user from the database
 func deleteArticleForUser(w http.ResponseWriter, r *http.Request) {
+    enableCors(&w)
     w.Header().Set("Content-Type", "application/json")
 
     // Assuming article ID and user ID are passed in the request body
@@ -372,6 +386,7 @@ func deleteArticleForUser(w http.ResponseWriter, r *http.Request) {
 
 // Function to update an article for a given user and save it to the database
 func updateArticleForUser(w http.ResponseWriter, r *http.Request) {
+    enableCors(&w)
     w.Header().Set("Content-Type", "application/json")
 
     // Assuming article details and user ID are passed in the request body
@@ -405,6 +420,8 @@ func updateArticleForUser(w http.ResponseWriter, r *http.Request) {
     }
     fmt.Fprintf(w, "Article updated successfully")
 }
+
+
 
 func main() {
     connectDB()

@@ -34,7 +34,7 @@ const WomenPage = () => {
 
   return (
     <div>
-      <h1>Women's Articles</h1>
+      <h1>Women&apos;s Articles</h1>
       <div>
         <button onClick={() => handleCategoryFilter("")}>All</button>
         <button onClick={() => handleCategoryFilter("Hosen & Jeans")}>

@@ -14,7 +14,7 @@ const LandingPage = () => {
 
   const fetchArticles = async () => {
     try {
-      const response = await axios.get("/articles");
+      const response = await axios.get("http://localhost:8080/articles");
       setArticles(response.data);
       setFilteredArticles(response.data);
     } catch (error) {

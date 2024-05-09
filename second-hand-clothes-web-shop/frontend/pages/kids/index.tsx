@@ -34,7 +34,7 @@ const KidsPage = () => {
 
   return (
     <div>
-      <h1>Kids' Articles</h1>
+      <h1>Kids&apos; Articles</h1>
       <div>
         <button onClick={() => handleCategoryFilter("")}>All</button>
         <button onClick={() => handleCategoryFilter("Hosen & Jeans")}>
